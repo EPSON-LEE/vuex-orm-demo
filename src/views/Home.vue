@@ -1,18 +1,54 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+    <h1>{{ specificTitle.title }}</h1>
+    <div v-for="todo in todos" :key="todo.key">
+      {{ todo.id }} - {{ todo.title }}
+    </div>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from "@/components/HelloWorld.vue";
+import Todo from "../store/models/todo";
 
 export default {
   name: "home",
-  components: {
-    HelloWorld
-  }
+  computed: {
+    // Access data
+    todos: () => Todo.all(),
+    specificTitle: () =>
+      Todo.query()
+        .with("title")
+        .first()
+  },
+  created() {
+    // insert data
+    Todo.insert({
+      data: [
+        {
+          id: 1,
+          title: "Hello, world!",
+          body: "Some awesome body text...",
+          author: {
+            id: 1,
+            name: "John Doe",
+            email: "john@example.com"
+          }
+        },
+        {
+          id: 2,
+          title: "Hello, world 2!",
+          body: "Some awesome body text...",
+          author: {
+            id: 1,
+            name: "John Doe",
+            email: "john@example.com"
+          }
+        }
+      ]
+    });
+  },
+  methods: {},
+  components: {}
 };
 </script>
